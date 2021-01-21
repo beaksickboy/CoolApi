@@ -1,9 +1,8 @@
-import { Body, Controller, Get, HttpService, Post } from '@nestjs/common';
+import { Body, Controller, Get, HttpService, Post, Req } from '@nestjs/common';
 import * as puppeteer from 'puppeteer';
 import * as xml2js from 'xml2js';
 import { from } from 'rxjs';
 import { map, tap } from 'rxjs/operators';
-import ABC from 'form-data';
 
 import { CaptchaResponse, VerifyTaxDTO } from './crawl.dto';
 
@@ -495,23 +494,26 @@ export class CrawlController {
   }
 
   @Post('government-tax')
-  verifyTax(@Body() verifyTaxDTO: VerifyTaxDTO) {
-    const formData = new FormData();
+  verifyTax(@Req() req) {
 
-    formData.append('mst', verifyTaxDTO.taxCode);
-    formData.append('captcha', verifyTaxDTO.captcha);
-    formData.append('page', '1');
-    formData.append('action', 'action');
+	console.log(req);
 
-    const parser = new xml2js.Parser();
-     parser.parseString(mock, (a, b) => {
-      console.log(a)
-      console.log(b)
-     });
+    // const formData = new FormData();
+
+    // formData.append('mst', verifyTaxDTO.taxCode);
+    // formData.append('captcha', verifyTaxDTO.captcha);
+    // formData.append('page', '1');
+    // formData.append('action', 'action');
+
+    // const parser = new xml2js.Parser();
+    //  parser.parseString(mock, (a, b) => {
+    //   console.log(a)
+    //   console.log(b)
+    //  });
     return true;
 
     return this.httpService
-      .post('http://tracuunnt.gdt.gov.vn/tcnnt/mstdn.jsp', formData)
+      .post('http://tracuunnt.gdt.gov.vn/tcnnt/mstdn.jsp', '')
       .pipe(
         map((response) => {
           const parser = new xml2js.Parser();
